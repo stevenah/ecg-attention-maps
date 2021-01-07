@@ -1,5 +1,8 @@
 import datetime
 import os
+import GPUtil
+
+import tensorflow as tf
 
 DATA_LABELS = {
     'TestID': 0, 'VentricularRate': 1, 'P_RInterval': 2, 'QRSDuration': 3,
@@ -46,6 +49,50 @@ HISTORY_PATH = os.path.join(ROOT_DIRECTORY, HISTORY_FILE)
 
 EXPERIMENT_NAME = 'ECG_CNN_MODEL'
 
+DATASET = 'gesustimeshift'
+INPUT_TYPE = 'medians'
 
+PREDICTION_LABELS = [
+    'Asymmetry'
+]
 
+DEVICE_ID_LIST = GPUtil.getFirstAvailable(
+    order = 'memory',
+    maxLoad=0.9,
+    maxMemory=0.8,
+    attempts=3,
+    interval=15,
+    verbose=True
+)
 
+DEVICE_ID = DEVICE_ID_LIST[0]
+
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"] = str(DEVICE_ID)
+
+EPOCHS = 100 
+SAVE_AFTER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 18, 20, 25, 30, 40, 50, 62, 75, 87, 100, 125, 150, 175, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950]
+SAVE_AFTER = [ ]
+BATCH_SIZE = 32 
+K_FOLDS = 5 
+METRICS = [ 'mse', 'mae' ]
+LOSS_FUNCTION = 'mean_squared_error' 
+OPTIMIZER = tf.keras.optimizers.Nadam(lr=0.0008, beta_1=0.9, beta_2=0.999, epsilon=None, schedule_decay=0.004)
+
+STRATEGY = tf.distribute.OneDeviceStrategy(device="/gpu:0")
+
+GROUND_TRUTH_PATH = os.path.join(ROOT_DIRECTORY, '..', DATASET, 'asc', 'ground_truth.csv')
+MEDIANS_PATH = os.path.join(ROOT_DIRECTORY, '..',  DATASET, 'asc', 'medians')
+RHYTHM_PATH = os.path.join(ROOT_DIRECTORY, '..', DATASET, 'asc', 'rhythm')
+
+if INPUT_TYPE == 'rhythm':
+    ECG_PATH = RHYTHM_PATH
+else:
+    ECG_PATH = MEDIANS_PATH
+
+physical_devices = tf.config.list_physical_devices('GPU')
+
+try:
+    tf.config.experimental.set_memory_growth(physical_devices[0], True) 
+except: 
+    pass
