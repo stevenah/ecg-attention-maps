@@ -2,7 +2,7 @@
 This repository contains the code used to produce the results presented in "Explaining Deep Neural Networks for Knowledge Discovery in Electrocardiogram Analysis".
 
 ## Cite
-If you use this dataset in your research, Please cite the following paper:
+If you use this code in your research, Please cite the following paper:
 
     @article{Hicks2021,
       author = {Hicks, Steven A and Isaksen, Jonas L and Thambawita, Vajira and
