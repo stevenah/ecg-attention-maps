@@ -1,5 +1,5 @@
 # Explaining deep neural networks for knowledge discovery in electrocardiogram analysis
-This repository contains the code used to produce the results presented in "Explaining Deep Neural Networks for Knowledge Discovery in Electrocardiogram Analysis".
+This repository contains the code used to produce the results presented in ["Explaining Deep Neural Networks for Knowledge Discovery in Electrocardiogram Analysis"](https://www.nature.com/articles/s41598-021-90285-5).
 
 ## Cite
 If you use this code in your research, Please cite the following paper:
